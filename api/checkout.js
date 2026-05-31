@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
       subscription_data: {
         metadata: { name, phone, address, plan }
       },
-      success_url: `${process.env.NEXT_PUBLIC_URL || 'https://weeklyweeding.com'}/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.NEXT_PUBLIC_URL || 'https://weeklyweeding.com'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://weeklyweeding.com'}/#pricing`,
     });
 
