@@ -40,8 +40,7 @@ module.exports = async function handler(req, res) {
       line_items: [{ price: priceId, quantity: 1 }],
       metadata: { name, phone, address, plan },
       subscription_data: {
-        metadata: { name, phone, address, plan },
-        cancel_at: Math.floor(new Date('2026-10-31').getTime() / 1000)
+        metadata: { name, phone, address, plan }
       },
       success_url: `${process.env.NEXT_PUBLIC_URL || 'https://weeklyweeding.com'}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://weeklyweeding.com'}/#pricing`,
