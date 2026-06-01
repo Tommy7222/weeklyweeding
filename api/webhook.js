@@ -2,7 +2,17 @@ const Stripe = require('stripe');
 const { createClient } = require('@supabase/supabase-js');
 const { Resend } = require('resend');
 
-// IMPORTANT: Disable body parsing so Stripe can verify signature
+// Must disable body parsing for Stripe signature verification
+module.exports.config = { api: { bodyParser: false } };
+
+async function buffer(readable) {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -11,8 +21,9 @@ module.exports = async function handler(req, res) {
 
   let event;
   try {
+    const rawBody = await buffer(req);
     event = stripe.webhooks.constructEvent(
-      req.body,
+      rawBody,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
@@ -97,10 +108,8 @@ module.exports = async function handler(req, res) {
       </div>`
     });
 
-    console.log('Emails sent successfully!');
+    console.log('All emails sent!');
   }
 
   return res.status(200).json({ received: true });
 }
-
-module.exports.config = { api: { bodyParser: false } };
